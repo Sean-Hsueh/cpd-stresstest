@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: selenium-py
+spec:
+  containers:
+    - image: python:3-alpine
+      imagePullPolicy: IfNotPresent
+      name: python
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          source /root/work/install.sh
+          python /root/work/${CASE_NAME}.py
+      env:
+        - name: GIT_USERNAME
+          value: "1403035"
+        - name: GIT_PASSWORD
+          value: "11111111"
+        - name: DAS_USER
+          value: "das"
+        - name: DAS_PASSWORD
+          value: "NchcDAS@2020"
+        - name: DAS_INSTANCE
+          value: "https://lab.das.twcc.ai/"
+        - name: REMOTE_EXECUTOR
+          value: "http://selenium:4444/wd/hub"
+        - name: CASE_NAME
+          value: "connection"
+      volumeMounts:
+        - mountPath: /root/work
+          name: script
+  restartPolicy: Never
+  volumes:
+    - name: script
+      configMap:
+        name: script

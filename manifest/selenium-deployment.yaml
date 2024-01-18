@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selenium-deployment
+  # namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: selenium
+  template:
+    metadata:
+      labels:
+        run: selenium
+    spec:
+      containers:
+        - image: python:3-alpine
+          imagePullPolicy: IfNotPresent
+          name: selenium-py
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              source /root/work/install.sh
+              python /root/work/${CASE_NAME}.py
+          env:
+            - name: GIT_USERNAME
+              value: "1403035"
+            - name: GIT_PASSWORD
+              value: "ogRE04032021"
+            - name: DAS_USER
+              value: "das"
+            - name: DAS_PASSWORD
+              value: "NchcDAS@2020"
+            - name: DAS_INSTANCE
+              value: "https://lab.das.twcc.ai/"
+            - name: REMOTE_EXECUTOR
+              value: "http://localhost:4444/wd/hub"
+            - name: CASE_NAME
+              value: "notebook"
+          volumeMounts:
+            - mountPath: /root/work
+              name: script
+        - name: selenium-standalone-chrome
+          image: selenium/standalone-chrome-debug:latest
+          ports:
+            - containerPort: 4444
+            - containerPort: 5900
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: cache-volume
+            - mountPath: /tmp/sample/area_trend_data
+              name: area-trend-data
+            - mountPath: /tmp/sample/airline_data
+              name: airline-data
+            - mountPath: /tmp/sample/go_sales_data
+              name: go-sales-data
+      volumes:
+        - name: script
+          configMap:
+            name: script
+        - name: cache-volume
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2048Mi
+        - name: area-trend-data
+          configMap:
+            name: area-trend-data
+        - name: airline-data
+          configMap:
+            name: airline-data
+        - name: go-sales-data
+          configMap:
+            name: go-sales

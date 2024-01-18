@@ -1,0 +1,99 @@
+kind: BuildConfig
+apiVersion: v1
+metadata:
+  name: selenium-sample
+  namespace: jenkins
+spec:
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfile: |-
+        podTemplate(cloud: 'openshift', yaml: """
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: selenium-py
+        spec:
+          containers:
+          - image: python:3-alpine
+            imagePullPolicy: IfNotPresent
+            name: selenium-py
+            command: ["tail","-f","/dev/null"]
+            env:
+              - name: GIT_USERNAME
+                value: "1403035"
+              - name: GIT_PASSWORD
+                value: "11111111"
+              - name: DAS_USER
+                value: "das"
+              - name: DAS_PASSWORD
+                value: "NchcDAS@2020"
+              - name: DAS_INSTANCE
+                value: "https://lab.das.twcc.ai/"
+              - name: REMOTE_EXECUTOR
+                value: "http://localhost:4444/wd/hub"
+            volumeMounts:
+              - mountPath: /root/work
+                name: script
+          - name: selenium-standalone-chrome
+            image: selenium/standalone-chrome-debug:latest
+            ports:
+              - containerPort: 4444
+              - containerPort: 5900
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: cache-volume
+              - mountPath: /tmp/sample/area_trend_data
+                name: area-trend-data
+              - mountPath: /tmp/sample/airline_data
+                name: airline-data
+              - mountPath: /tmp/sample/go_sales_data
+                name: go-sales-data
+          volumes:
+            - name: script
+              configMap:
+                name: script
+            - name: cache-volume
+              emptyDir:
+                medium: Memory
+                sizeLimit: 2048Mi
+            - name: area-trend-data
+              configMap:
+                name: area-trend-data
+            - name: airline-data
+              configMap:
+                name: airline-data
+            - name: go-sales-data
+              configMap:
+                name: go-sales
+        """
+        ) {
+            node(POD_LABEL) {
+              // setup cron trigger
+              // run every hour
+              properties([pipelineTriggers([cron('H * * * *')])]) 
+              // run every day around 18:XX UTC time
+              // properties([pipelineTriggers([cron('H 18 * * *')])]) 
+
+              def tests = []
+              // def tests = ["connection.py", "notebook.py","dashboard.py","refinery.py"]
+              stage('install package') {
+                container('selenium-py') {
+                  sh "sh /root/work/install.sh"
+                  tests = sh(script:"find /root/work  -name '*.py' -maxdepth 1 -mindepth 1 -print -type f | sed 's#.*/##'", returnStdout:true).split()
+                }
+              }
+              
+              for (py in tests) {
+                stage(py) {
+                  container('selenium-py') {
+                    catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                      sh "python /root/work/${py}"
+                    }
+                  }
+                }
+              }
+            }  
+        }
+  triggers:
+    - type: ConfigChange

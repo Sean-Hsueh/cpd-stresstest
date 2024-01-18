@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: DasUITesting
+Version: 0.1.0
+Summary: Selenium based package for test CPD
+Home-page: https://github.com/shuds13/pyexample
+Author: Jimmy Chuang
+Author-email: jimmy_chuang@narlabs.org.tw
+Requires-Dist: selenium
+Requires-Dist: requests
+Requires-Dist: pytz

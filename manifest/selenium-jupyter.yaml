@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: jupyter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jupyter
+    spec:
+      containers:
+        - name: jupyter
+          image: jupyter/base-notebook:latest
+          ports:
+            - containerPort: 8888
+          command: ["/usr/local/bin/start-notebook.sh"]
+          securityContext:
+            runAsUser: 0
+          args: ["--NotebookApp.token=''", "--NotebookApp.password=''"]
+          env:
+            - name: GIT_USERNAME
+              value: "1403035"
+            - name: GIT_PASSWORD
+              value: "11111111"
+            - name: DAS_USER
+              value: "das"
+            - name: DAS_PASSWORD
+              value: "NchcDAS@2020"
+            - name: DAS_INSTANCE
+              value: "https://lab.das.twcc.ai/"
+            - name: REMOTE_EXECUTOR
+              value: "http://selenium:4444/wd/hub"
+            - name: GRANT_SUDO
+              value: "yes"
+          volumeMounts:
+            - mountPath: /home/jovyan/work
+              name: script
+      volumes:
+        - name: script
+          configMap:
+            name: script
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jupyter
+  namespace: default
+  labels:
+    app: jupyter
+spec:
+  type: NodePort
+  ports:
+    - port: 8888
+      protocol: TCP
+      name: jupyter
+  selector:
+    app: jupyter
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: selenium
+spec:
+  rules:
+    - host: jupyter.140-110-136-74.nip.io
+      http:
+        paths:
+          - backend:
+              serviceName: jupyter
+              servicePort: 8888
