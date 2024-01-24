@@ -35,7 +35,7 @@ USER = os.environ.get("DAS_USER")
 PASSWORD = os.environ.get("DAS_PASSWORD")
 EXECUTOR = os.environ.get("REMOTE_EXECUTOR")
 
-logging.info(">>> Test begin with : %s, %s, %s" % BASE_URL, USER, PASSWORD)
+logging.info(">>> Test begin with : %s, %s, %s" % (BASE_URL, USER, PASSWORD))
 
 
 # + pycharm={"name": "#%%\n"}
