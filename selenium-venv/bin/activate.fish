@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/sean/ibmWorkSpace/cpd-stresstest/selenium-venv"
+set -gx VIRTUAL_ENV "/Users/sean/ibmWorkSpace/selenium-script-master/selenium-venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

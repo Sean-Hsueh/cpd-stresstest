@@ -39,7 +39,7 @@ You can see browser behavior by using VNC viewer connect to localhost:5900.
 ```
 $ cd selenium-script
 
-$ docker run  -ti -p 4444:4444 -p 5900:5900  --shm-size=2g --rm selenium/standalone-chrome-debug:latest
+$ docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=2g --rm selenium/standalone-chrome-debug:latest
 ```
 
 ### Run Selenium script
@@ -67,3 +67,21 @@ $ docker run  -ti -p 4444:4444 -p 5900:5900  --shm-size=2g --rm selenium/standal
 
 
   ```
+
+docker run -ti --rm \
+ -v /Users/sean/ibmWorkSpace/cpd-stresstest:/tmp/selenium-script \
+ -e DAS_INSTANCE="https://cpd.org.tw" \
+ -e DAS_USER=user \
+ -e DAS_PASSWORD=password \
+ -e REMOTE_EXECUTOR="http://host.docker.internal:4444/wd/hub" \
+ -e CASE=notebook \
+ python:3-alpine sh /tmp/selenium-script/docker/bootstrap.sh
+
+docker run -ti --rm \
+ -v C:\Users\157717\Downloads\cpd-healthcheck-main:/tmp/selenium-script \
+ -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/zen/" \
+ -e DAS_USER=STI9003 \
+ -e DAS_PASSWORD=N123qweasdzxc \
+ -e REMOTE_EXECUTOR="http://host.docker.internal:4444/wd/hub" \
+ -e CASE=notebook \
+ python:3-alpine sh /tmp/selenium-script/docker/bootstrap.sh

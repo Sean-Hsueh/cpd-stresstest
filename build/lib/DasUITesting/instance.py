@@ -67,4 +67,3 @@ class Instance:
 
     def deployment(self):
         return deployment.Deployment(self)
-

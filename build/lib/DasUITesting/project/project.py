@@ -12,7 +12,6 @@ OVERVIEW = "overview"
 ASSETS = "assets"
 ENVIRONMENTS = "environments"
 JOBS = "jobs"
-
 TAB_ID = {
     OVERVIEW: "projectDetailsOverviewContent",
     ASSETS: "projectDetailsAssets",
