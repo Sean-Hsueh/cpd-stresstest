@@ -57,7 +57,7 @@ try:
     instance.logout()
     instance.close()
 except Exception as e:
-    util.print_image_base64_encoding(instance.driver, "/tmp/%s.png" % project_name)
+    util.print_image_base64_encoding(instance.driver, "/tmp/selenium-script/%s.png" % project_name)
     raise
 
 # + pycharm={"name": "#%%\n"}
