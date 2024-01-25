@@ -48,8 +48,6 @@ class Instance:
         LOGIN_URL = "%s/auth/login/sso?logged_out=true" % self.BASE_URL.strip("/")
 
         self.driver.get(LOGIN_URL)
-        print('sleeping')
-        time.sleep(20)
         self.driver.find_element(By.ID, "username-textinput").send_keys(user)
         self.driver.find_element(By.ID, "password-textinput").send_keys(password)
         self.driver.find_element(By.CSS_SELECTOR, "#signInButton > span").click()
