@@ -39,7 +39,11 @@ You can see browser behavior by using VNC viewer connect to localhost:5900.
 ```
 $ cd selenium-script
 
-$ docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=2g --rm selenium/standalone-chrome-debug:latest
+$ docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/standalone-chrome-debug:latest
+
+  docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/standalone-chrome-debug:3.141.59-zinc
+
+  docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm seleniarm/standalone-chromium
 ```
 
 ### Run Selenium script
@@ -58,9 +62,9 @@ $ docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=2g --rm selenium/stan
   $ cd selenium-script
   $ docker run  -ti --rm \
       -v `pwd`:/tmp/selenium-script  \
-      -e DAS_INSTANCE="https://cpd.org.tw" \
-      -e DAS_USER=user \
-      -e DAS_PASSWORD=password \
+      -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cpd48anna.cp.fyre.ibm.com/" \
+      -e DAS_USER=root \
+      -e DAS_PASSWORD=HelloWorld2022! \
       -e REMOTE_EXECUTOR="http://host.docker.internal:4444/wd/hub" \
       -e CASE=notebook \
       python:3-alpine sh /tmp/selenium-script/docker/bootstrap.sh

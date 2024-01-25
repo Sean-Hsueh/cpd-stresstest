@@ -35,8 +35,7 @@ USER = os.environ.get("DAS_USER")
 PASSWORD = os.environ.get("DAS_PASSWORD")
 EXECUTOR = os.environ.get("REMOTE_EXECUTOR")
 
-logging.info(">>> Test begin with : %s, %s, %s" % (BASE_URL, USER, PASSWORD))
-
+print('>>> BASE_URL: %s, %s, %s, %s' %(BASE_URL, USER, PASSWORD, EXECUTOR))
 
 # + pycharm={"name": "#%%\n"}
 now = datetime.datetime.now(pytz.timezone("Asia/Taipei"))
@@ -47,8 +46,11 @@ start = time.time()
 
 # + tags=[]
 try:
+    print('starting')
     instance = instance.Instance(EXECUTOR, wait_timeout=120)
+    print('login')
     instance.login(BASE_URL, USER, PASSWORD)
+    print('login done')
     proj = instance.project(project_name)
     proj.create()
     proj.open("overview")
@@ -61,6 +63,7 @@ try:
     instance.logout()
     instance.close()
 except Exception as e:
+    print('closing')
     util.print_image_base64_encoding(instance.driver, "/tmp/%s.png" % project_name)
     raise
 

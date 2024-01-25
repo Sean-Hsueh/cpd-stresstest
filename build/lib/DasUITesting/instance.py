@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time
 
 
 # import time
@@ -14,6 +15,16 @@ class Instance:
         # full screen chrome
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--allow-running-insecure-content')
+        options.add_argument('--ignore-ssl-errors=yes')
+        options.add_argument('--ignore-certificate-errors-spki-list')
+        # options.setAcceptInsecureCerts(True)
+        # options.setAcceptSSLCerts(True)
+        # caps = options.to_capabilities()
+        # caps["acceptSSLCerts"] = True
+        # caps["acceptInsecureCerts"] = True
+        print('here: ', options)
 
         # enable headless mode
         if headless:
@@ -25,6 +36,7 @@ class Instance:
             command_executor=executor,
             options=options,
         )
+        print('here2')
 
         self.driver = driver
         self.wait = WebDriverWait(driver, wait_timeout)
@@ -36,6 +48,8 @@ class Instance:
         LOGIN_URL = "%s/auth/login/sso?logged_out=true" % self.BASE_URL.strip("/")
 
         self.driver.get(LOGIN_URL)
+        print('sleeping')
+        time.sleep(20)
         self.driver.find_element(By.ID, "username-textinput").send_keys(user)
         self.driver.find_element(By.ID, "password-textinput").send_keys(password)
         self.driver.find_element(By.CSS_SELECTOR, "#signInButton > span").click()

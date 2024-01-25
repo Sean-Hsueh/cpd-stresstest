@@ -14,6 +14,11 @@ class Instance:
         # full screen chrome
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--allow-running-insecure-content')
+        options.add_argument('--ignore-ssl-errors=yes')
+        options.add_argument('--ignore-certificate-errors-spki-list')
+        print('here: ', options)
 
         # enable headless mode
         if headless:
