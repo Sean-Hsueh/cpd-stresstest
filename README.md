@@ -101,3 +101,16 @@ docker run -ti --rm `
  --net=host `
  -e CASE="spss" `
  python:3-alpine sh /tmp/selenium-script/docker/bootstrap.sh
+
+docker run -ti --rm `
+ -v ${PWD}:/tmp/selenium-script `
+ -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" `
+ -e DAS_USER="STI9003" `
+ -e DAS_PASSWORD="N123qweasdzxc" `
+ -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" `
+ --net=host `
+ -e CASE="spss" `
+ cpd-stress:latest python /tmp/selenium-script/docker/spss.py
+
+# page to check
+https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/data/catalogs/e292c730-2cc4-4a81-91a8-03da6ed59363/asset/adcbe5b7-a559-43e6-8088-7de56ea4bed3/profiling?context=icp4data
