@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
@@ -67,29 +67,42 @@ class Project:
     def search_and_open(self, asset_name):
         print('navigate to assets tab')
         self.navigate(ASSETS)
-        
-       
+
         util.debug(self.instance.driver, 'searching for asset: %s' % asset_name)
         search_box = self.wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "input.bx--search-input[type='text'][tabindex='0']"))
         )
         util.debug(self.instance.driver, 'found')
+
         search_box.click()
         util.debug(self.instance.driver, 'clicked')
+
         search_box.clear()
         util.debug(self.instance.driver, 'cleared')
+
         search_box.send_keys(asset_name)
-        util.debug(self.instance.driver, 'inputed the asset name %s' % asset_name)
+        util.debug(self.instance.driver, 'inputed the asset name： %s' % asset_name)
 
-        self.wait.until(
-            EC.visibility_of_element_located(
-                (By.XPATH, "//a[@title='Workshop (version 1.0)']")
-            )
-        ).click()
-        util.debug(self.instance.driver, 'found the asset and clicked')
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@title='Workshop (version 1.0)']"))).click()
+        util.debug(self.instance.driver, 'found the target modeler flow and clicked')
 
-        
-        pass
+        select_element = self.wait.until(EC.element_to_be_clickable((By.ID, "modeler-environment-options-select")))
+        util.debug(self.instance.driver, 'found runtime dropdown')
+
+        Select(select_element).select_by_visible_text("Default SPSS Modeler (2 vCPU 8 GB RAM)")
+        util.debug(self.instance.driver, 'select Default SPSS Modeler (2 vCPU 8 GB RAM)')
+
+        self.instance.driver.find_element(By.XPATH, "//button[contains(text(), 'Start runtime')]").click()
+        util.debug(self.instance.driver, 'Click start runtime')
+
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'hopscotch-bubble-close hopscotch-close') and text()='Close']"))).click()
+        util.debug(self.instance.driver, 'Click close intro')
+
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@data-id='runStream-action-0-tooltip-trigger']/ancestor::button"))).click()
+        util.debug(self.instance.driver, 'Click run all')
+
+
+
 
     def navigate(self, tab_id=OVERVIEW):
         print('navigating')

@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
 
 # import time
@@ -19,11 +18,6 @@ class Instance:
         options.add_argument('--allow-running-insecure-content')
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors-spki-list')
-        # options.setAcceptInsecureCerts(True)
-        # options.setAcceptSSLCerts(True)
-        # caps = options.to_capabilities()
-        # caps["acceptSSLCerts"] = True
-        # caps["acceptInsecureCerts"] = True
         print('here: ', options)
 
         # enable headless mode
@@ -36,7 +30,6 @@ class Instance:
             command_executor=executor,
             options=options,
         )
-        print('here2')
 
         self.driver = driver
         self.wait = WebDriverWait(driver, wait_timeout)
