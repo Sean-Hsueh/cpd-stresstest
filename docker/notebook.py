@@ -47,6 +47,9 @@ start = time.time()
 try:
     instance = instance.Instance(EXECUTOR, wait_timeout=120)
     instance.login(BASE_URL, USER, PASSWORD)
+    util.print_image_base64_encoding(instance.driver, "/tmp/selenium-script/login.png" )
+    print('login success')
+
     proj = instance.project(project_name)
     proj.create()
     nb = proj.notebook(project_name)

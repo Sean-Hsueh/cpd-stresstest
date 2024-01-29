@@ -51,7 +51,7 @@ try:
     print('login')
     instance.login(BASE_URL, USER, PASSWORD)
     print('login done')
-    proj = instance.project(project_name)
+    proj = instance.project('PJ-2024Workshop_2')
     proj.create()
     proj.open("overview")
     proj.list()

@@ -7,6 +7,7 @@ from selenium.common.exceptions import TimeoutException
 import time, logging
 
 from . import data, notebook, dashboard, connection, refinery, autoai
+from .. import util
 
 OVERVIEW = "overview"
 ASSETS = "assets"
@@ -48,18 +49,52 @@ class Project:
         ).click()
 
         # open overview tab by default
-        self.driver.find_element(By.XPATH, "//a[@id='%s']" % TAB_ID[OVERVIEW]).click()
+        self.driver.find_element(By.ID, TAB_ID[OVERVIEW]).click()
+        # self.driver.find_element(By.XPATH, "//a[@id='%s']" % TAB_ID[OVERVIEW]).click()
 
+        # self.wait.until(
+        #     EC.visibility_of_element_located((By.XPATH, "//div[text()='Admin']"))
+        # )
         self.wait.until(
-            EC.visibility_of_element_located((By.XPATH, "//div[text()='Admin']"))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "div.dap-action-bar_add-container a.dap-action-bar_button[data-action='launch-export']"))
         )
 
         # go to different tab by parameter
         # go to desired tab
-        self.driver.find_element(By.XPATH, "//a[@id='%s']" % TAB_ID[tab_id]).click()
+        # self.driver.find_element(By.XPATH, "//a[@id='%s']" % TAB_ID[tab_id]).click()
+        self.driver.find_element(By.ID, TAB_ID[tab_id]).click()
+
+    def search_and_open(self, asset_name):
+        print('navigate to assets tab')
+        self.navigate(ASSETS)
+        
+       
+        util.debug(self.instance.driver, 'searching for asset: %s' % asset_name)
+        search_box = self.wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input.bx--search-input[type='text'][tabindex='0']"))
+        )
+        util.debug(self.instance.driver, 'found')
+        search_box.click()
+        util.debug(self.instance.driver, 'clicked')
+        search_box.clear()
+        util.debug(self.instance.driver, 'cleared')
+        search_box.send_keys(asset_name)
+        util.debug(self.instance.driver, 'inputed the asset name %s' % asset_name)
+
+        self.wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//a[@title='Workshop (version 1.0)']")
+            )
+        ).click()
+        util.debug(self.instance.driver, 'found the asset and clicked')
+
+        
+        pass
 
     def navigate(self, tab_id=OVERVIEW):
-        self.driver.find_element(By.XPATH, "//a[@id='%s']" % TAB_ID[tab_id]).click()
+        print('navigating')
+        self.driver.find_element(By.ID, TAB_ID[tab_id]).click()
+        print('navigated')
 
         if tab_id == JOBS:
             self.wait.until(
@@ -81,11 +116,8 @@ class Project:
             )
 
         if tab_id == ASSETS:
-            self.wait.until(
-                EC.visibility_of_element_located(
-                    (By.XPATH, ' //span[text()="You don\'t have any Data assets yet."]')
-                )
-            )
+            self.wait.until(EC.visibility_of_element_located((By.ID, "ImportAssetButton")))
+
 
     def create(self):
         self.list()

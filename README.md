@@ -44,6 +44,7 @@ $ docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/stan
   docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/standalone-chrome-debug:3.141.59-zinc
 
   docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm seleniarm/standalone-chromium
+  docker run  -d -ti --net=host  --shm-size=4g --rm seleniarm/standalone-chromium
 ```
 
 ### Run Selenium script
@@ -86,6 +87,17 @@ docker run -ti --rm \
  -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/zen/" \
  -e DAS_USER=STI9003 \
  -e DAS_PASSWORD=N123qweasdzxc \
- -e REMOTE_EXECUTOR="http://host.docker.internal:4444/wd/hub" \
+ -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" \
+ --net=host \
  -e CASE=notebook \
+ python:3-alpine sh /tmp/selenium-script/docker/bootstrap.sh
+
+docker run -ti --rm `
+ -v ${PWD}:/tmp/selenium-script `
+ -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" `
+ -e DAS_USER="STI9003" `
+ -e DAS_PASSWORD="N123qweasdzxc" `
+ -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" `
+ --net=host `
+ -e CASE="spss" `
  python:3-alpine sh /tmp/selenium-script/docker/bootstrap.sh

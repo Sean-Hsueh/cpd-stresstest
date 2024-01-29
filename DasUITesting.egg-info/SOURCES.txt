@@ -19,3 +19,4 @@ DasUITesting/project/data.py
 DasUITesting/project/notebook.py
 DasUITesting/project/project.py
 DasUITesting/project/refinery.py
+DasUITesting/project/spss.py
