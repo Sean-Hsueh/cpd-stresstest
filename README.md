@@ -41,10 +41,10 @@ $ cd selenium-script
 
 $ docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/standalone-chrome-debug:latest
 
-  docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/standalone-chrome-debug:3.141.59-zinc
+docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm selenium/standalone-chrome-debug:3.141.59-zinc
 
-  docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm seleniarm/standalone-chromium
-  docker run  -d -ti --net=host  --shm-size=4g --rm seleniarm/standalone-chromium
+docker run  -d -ti -p 4444:4444 -p 5900:5900  --shm-size=4g --rm seleniarm/standalone-chromium
+docker run  -d -ti --net=host  --shm-size=4g --rm seleniarm/standalone-chromium
 ```
 
 ### Run Selenium script
@@ -94,14 +94,27 @@ docker run -ti --rm \
 
 docker run -ti --rm -v ${PWD}:/tmp/selenium-script -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" -e DAS_USER="STI9003" -e DAS_PASSWORD="N123qweasdzxc" -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" --net=host -e CASE="spss" seaning/cpd-stresstest:latest python /tmp/selenium-script/docker/spss.py
 
-docker run -ti --rm -v ${PWD}:/tmp/selenium-script -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" -e DAS_USER="STI9003" -e DAS_PASSWORD="N123qweasdzxc" -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" --net=host -e CASE="spss" seaning/cpd-stresstest:latest sh /tmp/selenium-script/docker/bootstrap.sh
+docker run -ti --rm -v ${PWD}:/tmp/selenium-script -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" -e DAS_USER="STI9003" -e DAS_PASSWORD="N123qweasdzxc" -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" --net=host -e CASE="nckuh" seaning/cpd-stresstest:latest sh /tmp/selenium-script/docker/bootstrap.sh
 
-docker run -ti --rm ` -v ${PWD}:/tmp/selenium-script`
--e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" ` -e DAS_USER="STI9003"`
--e DAS_PASSWORD="N123qweasdzxc" ` -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub"`
---net=host ` -e CASE="spss"`
-cpd-stress:latest python /tmp/selenium-script/docker/spss.py
+<!-- ＝＝＝＝＝＝＝＝ WIP -->
 
-# page to check
+USER_PASS_PAIRS=(
+"STI9003:N123qweasdzxc3"
+)
 
-https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/data/catalogs/e292c730-2cc4-4a81-91a8-03da6ed59363/asset/adcbe5b7-a559-43e6-8088-7de56ea4bed3/profiling?context=icp4data
+for pair in "${USER_PASS_PAIRS[@]}"; do
+  IFS=':' read -r DAS_USER DAS_PASSWORD <<< "$pair"
+
+output*file="output*${DAS_USER}.log"
+
+docker run -d --rm -v ${PWD}:/tmp/selenium-script \
+      -e DAS_INSTANCE="https://cpd-cpd-instance.apps.cp4d2.hosp.ncku.edu.tw/" \
+      -e DAS_USER="${DAS_USER}" \
+ -e DAS_PASSWORD="${DAS_PASSWORD}" \
+ -e REMOTE_EXECUTOR="http://localhost:4444/wd/hub" \
+ -e LOG_FILE="output_file" \
+ --net=host -e CASE="nckuh" \
+ seaning/cpd-stresstest:latest sh /tmp/selenium-script/docker/bootstrap.sh
+
+unset IFS
+done

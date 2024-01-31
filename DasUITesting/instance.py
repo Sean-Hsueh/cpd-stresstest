@@ -6,6 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # import time
 from .project import project
+from .catalog import catalog
+print ('aa >>', catalog.__file__)
 from .deployment import deployment
 
 
@@ -69,6 +71,9 @@ class Instance:
     def project(self, project_name):
         prj = project.Project(project_name, self)
         return prj
+
+    def catalog(self, catalog_name):
+        return catalog.Catalog(catalog_name, self)
 
     def deployment(self):
         return deployment.Deployment(self)

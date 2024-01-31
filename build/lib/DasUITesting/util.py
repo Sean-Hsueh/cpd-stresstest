@@ -35,6 +35,3 @@ def debug2(driver, msg='debug', condition_func=None):
                 print(".", end='', flush=True)  # 条件函数返回False，打印点并等待
                 time.sleep(1)  # 等待一秒
 
-
-def base64_to_image():
-    pass

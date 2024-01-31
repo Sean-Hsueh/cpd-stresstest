@@ -7,7 +7,7 @@ from . import project
 import time, logging
 
 
-class AutoAI:
+class SPSS:
     def __init__(self, name, project):
         self.name = name
         self.project = project

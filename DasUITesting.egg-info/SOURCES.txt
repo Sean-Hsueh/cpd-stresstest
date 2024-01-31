@@ -8,6 +8,8 @@ DasUITesting.egg-info/SOURCES.txt
 DasUITesting.egg-info/dependency_links.txt
 DasUITesting.egg-info/requires.txt
 DasUITesting.egg-info/top_level.txt
+DasUITesting/catalog/__init__.py
+DasUITesting/catalog/catalog.py
 DasUITesting/deployment/__init__.py
 DasUITesting/deployment/deployment.py
 DasUITesting/deployment/space.py

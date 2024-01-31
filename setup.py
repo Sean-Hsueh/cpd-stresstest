@@ -7,7 +7,7 @@ setup(
     url="https://github.com/shuds13/pyexample",
     author="Jimmy Chuang",
     author_email="jimmy_chuang@narlabs.org.tw",
-    packages=["DasUITesting", "DasUITesting.deployment", "DasUITesting.project"],
+    packages=["DasUITesting", "DasUITesting.deployment", "DasUITesting.project", "DasUITesting.catalog"],
     install_requires=["selenium", "requests", "pytz"],
     classifiers=[],
 )
