@@ -44,6 +44,10 @@ class Instance:
 
         self.driver.get(LOGIN_URL)
         self.driver.find_element(By.ID, "username-textinput").send_keys(user)
+        print('waiting for user id input field')
+        self.wait.until(EC.visibility_of_element_located((By.ID, "username-textinput"))).send_keys(user)
+        print('input user id successfully')
+
         self.driver.find_element(By.ID, "password-textinput").send_keys(password)
         self.driver.find_element(By.CSS_SELECTOR, "#signInButton > span").click()
         self.wait.until(
