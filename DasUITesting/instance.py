@@ -43,7 +43,6 @@ class Instance:
         LOGIN_URL = "%s/auth/login/sso?logged_out=true" % self.BASE_URL.strip("/")
 
         self.driver.get(LOGIN_URL)
-        self.driver.find_element(By.ID, "username-textinput").send_keys(user)
         print('waiting for user id input field')
         self.wait.until(EC.visibility_of_element_located((By.ID, "username-textinput"))).send_keys(user)
         print('input user id successfully')
